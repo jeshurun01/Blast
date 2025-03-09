@@ -54,4 +54,5 @@ face_details = {
 # st.write(face_details)
 
 st.write("---")
-st.write("Made by *Nasser K.* -- Whatsapp number: :green[+243 972 488 648]")
+st.write("Made by *Nasser K.*")
+st.write("Whatsapp number: :green[+243 972 488 648]")
