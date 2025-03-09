@@ -12,7 +12,7 @@ with col1:
     explosive_density = st.number_input("Enter the explosive density: ")
 
     linear_charge = explosive_density * diameter**2 / 1273
-    st.write(f"The mass of the explosive charge is: **:red[{linear_charge:.2f}] kg/m³**")
+    st.write(f"The mass of the explosive charge is: **:red[{linear_charge:.2f}] kg/m**")
 
     charge_length = st.number_input("Enter the charge length (m):")
     hole_charge_mass = linear_charge * charge_length
