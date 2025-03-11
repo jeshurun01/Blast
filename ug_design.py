@@ -130,4 +130,5 @@ with cut:
         st.pyplot(cut_fig)
     else:
         st.text("Building in progress")
+        st.info("Please check the Cut Holes checkbox in the sidebar to see the cut design")
 
