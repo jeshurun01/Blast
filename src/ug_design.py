@@ -58,11 +58,10 @@ def add_cut(cut_cord, ax):
         ax.add_patch(circle)
 
 
-
 # Sidebar
 with st.sidebar:
     st.title("Design your stope")
-    diameter = st.number_input("Hole Diameter", 32, 300, 51)
+    diameter = st.number_input("Hole Diameter", 32, 300, st.session_state.hole_diameter)
     spacing = st.number_input("Spacing", 0.5, 10.0, 1.1)
     burden = st.number_input("Burden", 0.5, 10.0, 1.0)
     # Cut holes
@@ -96,6 +95,8 @@ with st.sidebar:
         side_stand_off = st.slider("Side Stand-Off", 0.0, 0.5, 0.2)
 
 
+# update session state
+st.session_state.hole_diameter = diameter
 
 hole_diameter = diameter / 1000
 spacing = spacing
@@ -107,8 +108,17 @@ cords = list(cords_generator(x_start, y_start, spacing, burden))
 
 
 df = pd.DataFrame(cords, columns=["x", "y"])
+df["delay"] = 0.0
+if "df" not in st.session_state:
+    st.session_state.df = df
+
 if is_cut:
     df = pd.concat([df, pd.DataFrame(cut_cords, columns=["x", "y"])], ignore_index=True)
+    df["delay"].fillna(0.0, inplace=True)
+
+# update session state with the DataFrame
+st.session_state.df = df
+
 
 design, data, cut = st.tabs(["Stope Design", "Stope Data", "Cut design"])
 
@@ -122,7 +132,13 @@ with data:
     total_number_holes = df["x"].count()
     st.write(f"Number of Hole: {total_number_holes}")
     st.divider()
-    st.dataframe(df)
+    edit_df = st.checkbox("Edit DataFrame")
+    if edit_df:
+        st.write("DataFrame with hole coordinates and delay:")
+        st.session_state.df = st.data_editor(st.session_state.df, use_container_width=True, num_rows="dynamic", key="df_editor")
+    else:
+        st.dataframe(st.session_state.df, use_container_width=True)
+
 with cut:
     if is_cut:
         st.text("Here is the cut")
